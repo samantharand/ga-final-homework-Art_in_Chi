@@ -5,6 +5,7 @@ DATABASE = SqliteDatabase('art.sqlite')
 class Art(Model):
 	name = CharField()
 	artist = CharField()
+	year_made = IntegerField()
 	current_residence = CharField()
 
 	class Meta:
