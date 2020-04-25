@@ -9,7 +9,7 @@ def art_index():
 	result = models.Art.select().dicts()
 	return jsonify(
 		data = [art for art in result],
-		message = 'Found all art in database',
+		message = f'Found all {len(result)} pieces of art in database',
 		status = 200
 	)
 
@@ -25,9 +25,6 @@ def create_art():
 	)
 	# print(new_art)
 	art_dict = model_to_dict(new_art)
-	print("")
-	print("art_dict")
-	print(art_dict)
 
 	return jsonify(
 		data = art_dict,
