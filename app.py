@@ -1,5 +1,8 @@
 from flask import Flask, jsonify
 
+from resources.art import art
+import models
+
 DEBUG=True
 PORT=8000
 
@@ -13,6 +16,6 @@ def landing_page():
 
 
 if __name__ == '__main__':
-	models.initialize() 
-	
+	models.init() 
+
 	app.run(debug=DEBUG, port=PORT)
