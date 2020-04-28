@@ -44,7 +44,27 @@ def delete_art(id):
 		status=200
 	), 200
 
+# update !!!
+@art.route('<id>', methods=['PUT'])
+def update_art(id):
+	payload = request.get_json()
 
+	update_query = models.Art.update(
+		name=payload['name'],
+		artist=payload['artist'],
+		year_made=payload['year_made'],
+		current_residence=payload['current_residence']
+	)
+	update_query.execute()
+
+	updated_art = models.Art.get_by_id(id)
+	updated_art_dict = model_to_dict(updated_art)
+
+	return jsonify(
+		data=updated_art_dict,
+		message=f'Successfully updated art, id#{id}',
+		status=200
+	), 200
 
 
 
