@@ -13,6 +13,7 @@ def art_index():
 		status = 200
 	)
 
+# create :)
 @art.route('/', methods=['POST'])
 def create_art():
 	payload = request.get_json()
@@ -31,3 +32,32 @@ def create_art():
 		message = f"Successfully added '{art_dict['name']}' to database",
 		status = 201
 		), 201
+
+# destroy :(
+@art.route('<id>', methods=['DELETE'])
+def delete_art(id):
+	delete_query = models.Art.delete().where(models.Art.id == id)
+	delete_query.execute()
+	return jsonify(
+		data={},
+		message=f'Successfully deleted art, id#{id}',
+		status=200
+	), 200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
