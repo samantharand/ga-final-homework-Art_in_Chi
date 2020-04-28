@@ -4,12 +4,18 @@ from resources.art import art
 from resources.museum import museum
 import models
 from flask_cors import CORS
+from flask_login import LoginManager
 
 DEBUG=True
 PORT=8000
 
 
 app = Flask(__name__)
+
+# configure login manager
+app.secret_key = 'Temp'
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 CORS(art, origins=['http://localhost:3000'], support_credentials=True)
 CORS(museum, origins=['http://localhost:3000'], support_credentials=True)
@@ -27,7 +33,7 @@ def landing_page():
 
 
 
-	
+
 
 
 if __name__ == '__main__':

@@ -1,6 +1,9 @@
 import models
 
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
+from flask_bcrypt import generate_password_hash, check_password_hash
+from playhouse.shortcuts import model_to_dict
+from flask_login import login_user
 
 museum = Blueprint('museum', 'museum')
 
@@ -13,24 +16,51 @@ def test():
 @museum.route('/register', methods=['POST'])
 def register():
 	payload = request.get_json()
-	# see if the user exists
-	print('pre-lower', payload)
 	payload['name'] = payload['name'].lower()
 	payload['email'] = payload['email'].lower()
-	print('post-lower', payload)
-    # if so -- we don't want to create the user
 
-    # response: "user with that email already exists"
+	try:
+		models.Museum.get(models.Museum['email'] == payload['email'])
+		
+		return jsonify (
+			data={},
+			message=f'{payload["email"]} is already registered',
+			status=401
+		), 401
+	
+	except models.DoesNotExist:
 
-	# if the user does not exist
+		try:
+			# name of museum
+			models.Museum.get(models.Museum['name'] == payload['name'])
 
-    # create them
+			return jsonify (
+				data={},
+				message=f'{payload["name"]} is already registered',
+				status=401
+			), 401
 
-    # respond with new object and success message
+		except models.DoesNotExist:
+
+			created_museum = models.Museum.create(
+				name=payload['name'],
+				email=payload['email'],
+				password=generate_password_hash(payload['password'])
+			)
+
+			login_user(created_museum)
+
+			created_museum_dict = model_to_dict(created_museum)
+			created_museum_dict.pop('password')
+			print(created_museum_dict)
+			return jsonify (
+				data=created_museum_dict,
+				message=f'successfully created {created_museum_dict["name"]}',
+				status=201
+			), 201
 
 
 	#print('request in register', request.get_json())
-	
 
 
 	return "check terminal"
