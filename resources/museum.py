@@ -12,5 +12,25 @@ def test():
 # register your museum
 @museum.route('/register', methods=['POST'])
 def register():
-	print('request in register', request.get_json())
+	payload = request.get_json()
+	# see if the user exists
+	print('pre-lower', payload)
+	payload['name'] = payload['name'].lower()
+	payload['email'] = payload['email'].lower()
+	print('post-lower', payload)
+    # if so -- we don't want to create the user
+
+    # response: "user with that email already exists"
+
+	# if the user does not exist
+
+    # create them
+
+    # respond with new object and success message
+
+
+	#print('request in register', request.get_json())
+	
+
+
 	return "check terminal"

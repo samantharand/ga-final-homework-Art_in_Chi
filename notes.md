@@ -23,7 +23,7 @@ Stop python3 app.py, check squlite
 
 	sqlite3 art.sqlite
 	.tables
-	.schema user 		--> basically shows the code that created it ?
+	.schema museum 		--> basically shows the code that created it ?
 
 
 Create and configure a login manager in app.py
