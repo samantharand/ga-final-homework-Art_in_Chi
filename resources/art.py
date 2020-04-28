@@ -54,7 +54,7 @@ def update_art(id):
 		artist=payload['artist'],
 		year_made=payload['year_made'],
 		current_residence=payload['current_residence']
-	)
+	).where(models.Art.id == id)
 	update_query.execute()
 
 	updated_art = models.Art.get_by_id(id)
