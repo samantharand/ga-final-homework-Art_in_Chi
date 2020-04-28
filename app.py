@@ -2,12 +2,15 @@ from flask import Flask, jsonify
 
 from resources.art import art
 import models
+from flask_cors import CORS
 
 DEBUG=True
 PORT=8000
 
 
 app = Flask(__name__)
+
+CORS(art, origins=['http://localhost:3000'], support_credentials=True)
 
 app.register_blueprint(art, url_prefix='/api/v1/art')
 
