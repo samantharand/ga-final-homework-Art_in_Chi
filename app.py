@@ -17,6 +17,17 @@ app.secret_key = 'Temp'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# user loader
+@login_manager.user_loader
+def load_user(user_id):
+	try:
+		return models.User.get_by_id(user_id)
+	except:
+		return None
+# @login_manager.unauthorized_handler
+# def unauthorized():
+
+
 CORS(art, origins=['http://localhost:3000'], support_credentials=True)
 CORS(museum, origins=['http://localhost:3000'], support_credentials=True)
 

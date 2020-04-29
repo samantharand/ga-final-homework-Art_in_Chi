@@ -3,7 +3,7 @@ import models
 from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
 from playhouse.shortcuts import model_to_dict
-from flask_login import login_user
+from flask_login import login_user, logout_user, current_user
 
 museum = Blueprint('museum', 'museum')
 
@@ -95,7 +95,15 @@ def login():
 	print(payload)
 	return "checka da termeenal"
 
-
+# logout
+@museum.route('/logout', methods=['GET'])
+def logout():
+	logout_user()
+	return jsonify(
+		data={},
+		message="successfully logged out :)",
+		status=200
+	), 200
 
 
 
