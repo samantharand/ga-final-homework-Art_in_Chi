@@ -18,7 +18,7 @@ def art_index():
 @art.route('/', methods=['POST'])
 def create_art():
 	payload = request.get_json()
-	print('CURRENT_USER',current_user)
+	print('CURRENT_USER LINE 21',current_user)
 	print('PAYLOAD', payload)
 	new_art = models.Art.create(
 		name=payload['name'],
