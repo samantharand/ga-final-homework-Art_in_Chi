@@ -21,11 +21,18 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
 	try:
-		return models.User.get_by_id(user_id)
-	except:
+		museum = models.Museum.get_by_id(museum_id)
+		return museum
+	except models.DoesNotExist:
 		return None
-# @login_manager.unauthorized_handler
-# def unauthorized():
+
+@login_manager.unauthorized_handler
+def unauthorized():
+	return jsonify(
+		data={'error': 'not logged in'},
+		message='u gotta be logged in, dude',
+		status=404
+	), 404
 
 
 CORS(art, origins=['http://localhost:3000'], support_credentials=True)
