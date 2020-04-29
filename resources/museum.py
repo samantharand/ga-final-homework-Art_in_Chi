@@ -24,7 +24,7 @@ def register():
 		
 		return jsonify(
 			data={},
-			message=f' is already registered',
+			message=f'email {payload["email"]} is already registered',
 			status=401
 		), 401
 	
@@ -36,7 +36,7 @@ def register():
 
 			return jsonify(
 				data={},
-				message=f' is already registered',
+				message=f'username {payload["name"]} is already registered',
 				status=401
 			), 401
 
@@ -47,10 +47,10 @@ def register():
 				email=payload['email'],
 				password=generate_password_hash(payload['password'])
 			)
-
 			login_user(created_museum)
 
 			created_museum_dict = model_to_dict(created_museum)
+			print('CREATED_MUSEUM_dict',created_museum_dict)
 			created_museum_dict.pop('password')
 			print(created_museum_dict)
 			return jsonify(
@@ -63,7 +63,6 @@ def register():
 @museum.route('/login', methods=['POST'])
 def login():
 	payload = request.get_json()
-	payload['name'] = payload['name'].lower()
 	payload['email'] = payload['email'].lower()
 
 	try:
@@ -71,8 +70,8 @@ def login():
 		museum = models.Museum.get(models.Museum.email == payload['email'])
 
 		museum_dict = model_to_dict(museum)
-
-		password_is_good = check_password_hash(museum_dict['password'])
+		print('MUSEUM_DICT',museum_dict)
+		password_is_good = check_password_hash(museum_dict['password'], payload['password'])
 
 
 		if password_is_good:
