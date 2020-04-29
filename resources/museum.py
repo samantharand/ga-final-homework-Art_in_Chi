@@ -128,9 +128,9 @@ def museum_index():
 	return jsonify(museum_dicts)
 
 #temp route
-@museum.route('/current', methods=['GET'])
+@museum.route('/get_current_museum', methods=['GET'])
 def get_current_museum():
-	print(current_user)
+	print('CURRENT USER line 133', current_user)
 	print(type(current_user))
 
 	museum_dict = model_to_dict(current_user)
