@@ -41,15 +41,27 @@ def create_art():
 
 # destroy :(
 @art.route('/<id>', methods=['DELETE'])
+@login_required
 def delete_art(id):
-	delete_query = models.Art.delete().where(models.Art.id == id)
-	delete_query.execute()
-	return jsonify(
-		data={},
-		message=f'Successfully deleted art, id#{id}',
-		status=200
-	), 200
+	payload = request.get_json()
+	art_to_delete = models.Art.get_by_id(id)
+	art_to_delete_dict = model_to_dict(art_to_delete)
 
+	if current_user.id == art_to_delete_dict['current_residence']['id']:
+		art_to_delete.delete_instance()
+
+
+		return jsonify(
+			data={},
+			message=f'Successfully deleted art, id#{id}',
+			status=200
+		), 200
+	else:
+		return jsonify(
+			data= {},
+			message="thats not ur art",
+			status=403
+		), 403
 # update !!!
 @art.route('/<id>', methods=['PUT'])
 @login_required
