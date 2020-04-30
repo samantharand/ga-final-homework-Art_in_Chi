@@ -1,15 +1,17 @@
 import models
 from flask import Blueprint, request, jsonify
 from playhouse.shortcuts import model_to_dict
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 art = Blueprint('art', 'art')
 
 @art.route('/', methods=['GET'])
 def art_index():
+	current_user_art_dicts = [ model_to_dict(art) for art in current_user.art]
+	# print('sldkfjlsdkjfslkfjs')
 	result = models.Art.select().dicts()
 	return jsonify(
-		data = [art for art in result],
+		data = current_user_art_dicts,
 		message = f'Found all {len(result)} pieces of art in database',
 		status = 200
 	)
@@ -28,6 +30,7 @@ def create_art():
 	)
 	print(new_art)
 	art_dict = model_to_dict(new_art)
+	art_dict['current_residence'].pop('password')
 
 	return jsonify(
 		data = art_dict,
@@ -37,7 +40,7 @@ def create_art():
 	return "check term"
 
 # destroy :(
-@art.route('<id>', methods=['DELETE'])
+@art.route('/<id>', methods=['DELETE'])
 def delete_art(id):
 	delete_query = models.Art.delete().where(models.Art.id == id)
 	delete_query.execute()
@@ -48,17 +51,14 @@ def delete_art(id):
 	), 200
 
 # update !!!
-@art.route('<id>', methods=['PUT'])
+@art.route('/<id>', methods=['PUT'])
+# @login_required
 def update_art(id):
 	payload = request.get_json()
+	art_to_update = models.Art.get_by_id(id)
 
-	update_query = models.Art.update(
-		name=payload['name'],
-		artist=payload['artist'],
-		year_made=payload['year_made'],
-		current_residence=payload['current_residence']
-	).where(models.Art.id == id)
-	update_query.execute()
+	print(art_to_update)
+	print(current_user)
 
 	updated_art = models.Art.get_by_id(id)
 	updated_art_dict = model_to_dict(updated_art)
