@@ -52,22 +52,34 @@ def delete_art(id):
 
 # update !!!
 @art.route('/<id>', methods=['PUT'])
-# @login_required
-def update_art(id):
+@login_required
+def update_the_art(id):
 	payload = request.get_json()
 	art_to_update = models.Art.get_by_id(id)
+	art_to_update_dict = model_to_dict(art_to_update)
 
-	print(art_to_update)
-	print(current_user)
+	if current_user.id == art_to_update_dict['current_residence']['id']:
 
-	updated_art = models.Art.get_by_id(id)
-	updated_art_dict = model_to_dict(updated_art)
+		art_to_update_dict['name'] = payload['name']
+		art_to_update_dict['artist'] = payload['artist']
+		art_to_update_dict['year_made'] = payload['year_made']
 
-	return jsonify(
-		data=updated_art_dict,
-		message=f'Successfully updated art, id#{id}',
-		status=200
-	), 200
+		art_to_update_dict['current_residence'].pop('password')
+
+		
+
+		return jsonify(
+			data=art_to_update_dict,
+			message=f'Successfully updated art, id#{id}',
+			status=200
+		), 200
+	else:
+		return jsonify(
+			data= {},
+			message="thats not ur art",
+			status=403
+		), 403
+	# return "check term"
 
 
 
