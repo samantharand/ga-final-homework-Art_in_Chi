@@ -16,6 +16,7 @@ def test():
 @museum.route('/register', methods=['POST'])
 def register():
 	payload = request.get_json()
+	print("payload", payload)
 	payload['name'] = payload['name'].lower()
 	payload['email'] = payload['email'].lower()
 
