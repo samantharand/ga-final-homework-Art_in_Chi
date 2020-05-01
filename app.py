@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 from resources.art import art
 from resources.museum import museum
 import models
-from flask_cors import CORS
+from flask_cors import CORS, logging
 from flask_login import LoginManager
 
 DEBUG=True
@@ -34,9 +34,11 @@ def unauthorized():
 		status=404
 	), 404
 
+## TROUBLE SHOOTING 
+logging.getLogger('flask_cors').level = logging.DEBUG
 
-CORS(art, origins=['http://localhost:3000'], support_credentials=True)
-CORS(museum, origins=['http://localhost:3000'], support_credentials=True)
+CORS(art, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(museum, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(art, url_prefix='/api/v1/art')
 app.register_blueprint(museum, url_prefix='/api/v1/museum')

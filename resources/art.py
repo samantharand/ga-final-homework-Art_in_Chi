@@ -6,18 +6,20 @@ from flask_login import current_user, login_required
 art = Blueprint('art', 'art')
 
 @art.route('/', methods=['GET'])
+@login_required
 def art_index():
 	current_user_art_dicts = [ model_to_dict(art) for art in current_user.art]
 	# print('sldkfjlsdkjfslkfjs')
 	result = models.Art.select().dicts()
 	return jsonify(
 		data = current_user_art_dicts,
-		message = f'Found all {len(result)} pieces of art in database',
+		message = f'Found your art in database',
 		status = 200
 	)
 
 # create :)
 @art.route('/', methods=['POST'])
+@login_required
 def create_art():
 	payload = request.get_json()
 	print('CURRENT_USER LINE 21',current_user)
@@ -43,7 +45,6 @@ def create_art():
 @art.route('/<id>', methods=['DELETE'])
 @login_required
 def delete_art(id):
-	payload = request.get_json()
 	art_to_delete = models.Art.get_by_id(id)
 	art_to_delete_dict = model_to_dict(art_to_delete)
 

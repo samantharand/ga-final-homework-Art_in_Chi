@@ -85,8 +85,8 @@ def login():
 			return jsonify(
 				data=museum_dict,
 				message=f"successfully logged into {museum_dict['name']}'s account",
-				status=200
-			), 200
+				status=201
+			), 201
 		else:
 			print('bad password bro')
 
